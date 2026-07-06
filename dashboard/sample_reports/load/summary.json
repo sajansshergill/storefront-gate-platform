@@ -1,0 +1,25 @@
+{
+  "metrics": {
+    "http_req_duration": {
+      "values": {
+        "p(95)": 642.7,
+        "p(99)": 1048.3
+      }
+    },
+    "checkout_latency": {
+      "values": {
+        "p(95)": 918.4
+      }
+    },
+    "funnel_errors": {
+      "values": {
+        "rate": 0.003
+      }
+    },
+    "orders_placed": {
+      "values": {
+        "count": 1842
+      }
+    }
+  }
+}

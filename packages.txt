@@ -1,0 +1,2 @@
+# Streamlit Community Cloud reads this file for apt packages.
+# No system packages are required for the dashboard app.

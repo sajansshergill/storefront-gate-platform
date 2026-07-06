@@ -1,0 +1,64 @@
+{
+  "suites": [
+    {
+      "title": "storefront quality gates",
+      "specs": [
+        {
+          "title": "checkout price integrity",
+          "tests": [
+            {
+              "status": "expected",
+              "results": [
+                {
+                  "status": "passed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "account registration smoke",
+          "tests": [
+            {
+              "status": "expected",
+              "results": [
+                {
+                  "status": "passed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "cart quantity subtotal",
+          "tests": [
+            {
+              "status": "expected",
+              "results": [
+                {
+                  "status": "unexpected"
+                },
+                {
+                  "status": "passed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "optional visual regression",
+          "tests": [
+            {
+              "status": "skipped",
+              "results": [
+                {
+                  "status": "skipped"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

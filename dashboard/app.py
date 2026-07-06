@@ -16,16 +16,25 @@ Reads (all optional — missing gates render as "no data"):
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import streamlit as st  # type: ignore[reportMissingImports]
 
-REPORTS = Path("reports")
+ROOT = Path(__file__).resolve().parents[1]
+REPORTS = Path(os.getenv("REPORTS_DIR", ROOT / "reports"))
+SAMPLE_REPORTS = Path(__file__).resolve().parent / "sample_reports"
 
 
-def load_json(path: Path):
+def load_json(path: Path, fallback: Path | None = None):
     try:
         return json.loads(path.read_text())
+    except (FileNotFoundError, json.JSONDecodeError):
+        if fallback is None:
+            return None
+
+    try:
+        return json.loads(fallback.read_text())
     except (FileNotFoundError, json.JSONDecodeError):
         return None
 
@@ -91,9 +100,11 @@ def main():
     st.title("Storefront Quality Gate — Operations Dashboard")
     st.caption("Aggregated results across E2E, data quality, and load. One view, every gate.")
 
-    pw = parse_playwright(load_json(REPORTS / "json" / "results.json"))
-    dq = load_json(REPORTS / "data_quality" / "results.json")
-    load = parse_k6(load_json(REPORTS / "load" / "summary.json"))
+    pw_report = load_json(REPORTS / "json" / "results.json", SAMPLE_REPORTS / "json" / "results.json")
+    dq = load_json(REPORTS / "data_quality" / "results.json", SAMPLE_REPORTS / "data_quality" / "results.json")
+    load_report = load_json(REPORTS / "load" / "summary.json", SAMPLE_REPORTS / "load" / "summary.json")
+    pw = parse_playwright(pw_report)
+    load = parse_k6(load_report)
 
     # ---- Top-line KPIs ----
     c1, c2, c3, c4 = st.columns(4)

@@ -1,0 +1,35 @@
+{
+  "total": 4,
+  "passed": 4,
+  "failed": 0,
+  "checks": [
+    {
+      "file": "price_consistency.sql",
+      "description": "Pricing consistency: order line totals must reconcile to unit price * quantity.",
+      "passed": true,
+      "violation_count": 0,
+      "sample": []
+    },
+    {
+      "file": "catalog_referential_integrity.sql",
+      "description": "Catalog referential integrity: every order line must reference an active product variant.",
+      "passed": true,
+      "violation_count": 0,
+      "sample": []
+    },
+    {
+      "file": "order_totals_reconcile.sql",
+      "description": "Order totals: subtotal + tax + shipping - discounts must equal the persisted total.",
+      "passed": true,
+      "violation_count": 0,
+      "sample": []
+    },
+    {
+      "file": "order_state_machine.sql",
+      "description": "Order state-machine consistency: captured orders must have an authorized payment.",
+      "passed": true,
+      "violation_count": 0,
+      "sample": []
+    }
+  ]
+}
