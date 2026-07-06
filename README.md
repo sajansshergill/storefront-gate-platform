@@ -116,7 +116,7 @@ These run as a Great Expectations suite backed by parameterized SQL in `sql/vali
 ## Repository structure
 
 ```
-storefront-quality-gate/
+storefront-gate-platform/
 ├── src/framework/          # Reusable Playwright library (the "force multiplier")
 │   ├── pages/              #   Page Object Model
 │   ├── fixtures/           #   Auth, test data, DB connection fixtures
