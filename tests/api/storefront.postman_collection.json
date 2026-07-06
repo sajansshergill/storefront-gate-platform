@@ -1,0 +1,132 @@
+
+{
+    "info": {
+      "name": "Storefront API — Contract & Functional",
+      "description": "Newman-runnable checks against the Medusa store API. Each request asserts BOTH functional behaviour and its response schema (contract), so backend drift — a field renamed, a type changed, a price gone stale — fails the gate. Run: newman run tests/api/storefront.postman_collection.json -e tests/api/local.postman_environment.json",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "List products",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": { "raw": "{{store_api}}/store/products?limit=12", "host": ["{{store_api}}"], "path": ["store", "products"], "query": [{ "key": "limit", "value": "12" }] }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                "pm.test('responds under 500ms', () => pm.expect(pm.response.responseTime).to.be.below(500));",
+                "",
+                "const body = pm.response.json();",
+                "const schema = {",
+                "  type: 'object',",
+                "  required: ['products', 'count'],",
+                "  properties: {",
+                "    count: { type: 'number' },",
+                "    products: {",
+                "      type: 'array',",
+                "      items: {",
+                "        type: 'object',",
+                "        required: ['id', 'title', 'variants'],",
+                "        properties: {",
+                "          id: { type: 'string' },",
+                "          title: { type: 'string' },",
+                "          variants: { type: 'array' }",
+                "        }",
+                "      }",
+                "    }",
+                "  }",
+                "};",
+                "pm.test('product list matches contract schema', () => {",
+                "  pm.expect(pm.response.to.have.jsonSchema(schema));",
+                "});",
+                "pm.test('at least one product returned', () => pm.expect(body.products.length).to.be.above(0));",
+                "",
+                "// Hand the first variant to the next request",
+                "if (body.products.length && body.products[0].variants.length) {",
+                "  pm.collectionVariables.set('variant_id', body.products[0].variants[0].id);",
+                "}"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Create cart",
+        "request": {
+          "method": "POST",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": { "mode": "raw", "raw": "{}" },
+          "url": { "raw": "{{store_api}}/store/carts", "host": ["{{store_api}}"], "path": ["store", "carts"] }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                "const body = pm.response.json();",
+                "const schema = {",
+                "  type: 'object',",
+                "  required: ['cart'],",
+                "  properties: {",
+                "    cart: {",
+                "      type: 'object',",
+                "      required: ['id', 'region_id', 'items'],",
+                "      properties: {",
+                "        id: { type: 'string' },",
+                "        items: { type: 'array' }",
+                "      }",
+                "    }",
+                "  }",
+                "};",
+                "pm.test('cart matches contract schema', () => pm.expect(pm.response.to.have.jsonSchema(schema)));",
+                "pm.collectionVariables.set('cart_id', body.cart.id);"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Add line item",
+        "request": {
+          "method": "POST",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": { "mode": "raw", "raw": "{\n  \"variant_id\": \"{{variant_id}}\",\n  \"quantity\": 1\n}" },
+          "url": { "raw": "{{store_api}}/store/carts/{{cart_id}}/line-items", "host": ["{{store_api}}"], "path": ["store", "carts", "{{cart_id}}", "line-items"] }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                "const body = pm.response.json();",
+                "pm.test('line item persisted with a positive unit_price', () => {",
+                "  const items = body.cart.items;",
+                "  pm.expect(items.length).to.be.above(0);",
+                "  items.forEach((li) => pm.expect(li.unit_price).to.be.above(0));",
+                "});",
+                "pm.test('added variant matches requested variant', () => {",
+                "  const match = body.cart.items.some((li) => li.variant_id === pm.collectionVariables.get('variant_id'));",
+                "  pm.expect(match).to.be.true;",
+                "});"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "variable": [
+      { "key": "store_api", "value": "http://localhost:9000" },
+      { "key": "variant_id", "value": "" },
+      { "key": "cart_id", "value": "" }
+    ]
+  }

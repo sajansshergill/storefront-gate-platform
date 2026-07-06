@@ -143,18 +143,18 @@ storefront-gate-platform/
 Built in order of interview signal — Phase 1 alone tells the whole story.
 
 **Phase 1 — Core gates (highest signal)**
-- [ ] Playwright POM framework: cart, checkout, account
-- [ ] SQL + Great Expectations data-quality suite (price/catalog/order)
-- [ ] GitHub Actions PR gate (smoke + DQ), merge-blocking
+- [x] Playwright POM framework: cart, checkout, account
+- [x] SQL + Great Expectations data-quality suite (price/catalog/order)
+- [x] GitHub Actions PR gate (smoke + DQ), merge-blocking
 
 **Phase 2 — Contracts & AI**
-- [ ] Newman + OpenAPI schema validation
-- [ ] Claude test-gen tool (story → Playwright skeleton)
+- [x] Newman + OpenAPI schema validation
+- [x] Claude test-gen tool (story → Playwright skeleton)
 
 **Phase 3 — Scale & visibility**
-- [ ] k6 flash-sale load model + LoadRunner equivalency doc
-- [ ] axe-core accessibility gate
-- [ ] Streamlit dashboard (pass rate, flakiness, p95, a11y, DQ)
+- [x] k6 flash-sale load model + LoadRunner equivalency doc
+- [x] axe-core accessibility gate
+- [x] Streamlit dashboard (pass rate, flakiness, p95, a11y, DQ)
 
 ---
 
@@ -179,6 +179,9 @@ npx playwright test             # E2E
 python -m tests.data_quality    # Data-quality suite
 newman run tests/api/*.json     # Contract tests
 k6 run tests/load/flash-sale.js # Load
+
+# 4. Review results
+streamlit run dashboard/app.py
 ```
 
 ---

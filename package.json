@@ -1,0 +1,31 @@
+{
+  "name": "storefront-gate-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Quality gate platform for an eCommerce storefront.",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e",
+    "test:api": "playwright test tests/api",
+    "test:a11y": "playwright test tests/accessibility",
+    "test:smoke": "playwright test --grep @smoke",
+    "postman": "newman run tests/api/storefront.postman_collection.json",
+    "load": "k6 run --summary-export=reports/load/summary.json tests/load/flash-sale.js",
+    "reports:demo": "python tools/generate_demo_reports.py"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "latest",
+    "@playwright/test": "latest",
+    "@types/pg": "latest",
+    "ajv": "latest",
+    "ajv-formats": "latest",
+    "newman": "latest",
+    "pg": "latest",
+    "typescript": "latest"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "npm@10"
+}

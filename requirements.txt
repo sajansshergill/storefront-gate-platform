@@ -1,0 +1,5 @@
+anthropic
+great-expectations
+psycopg[binary]
+sqlalchemy
+streamlit

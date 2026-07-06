@@ -1,0 +1,28 @@
+config_version: 3.0
+datasources:
+  storefront_postgres:
+    class_name: Datasource
+    execution_engine:
+      class_name: SqlAlchemyExecutionEngine
+      connection_string: ${DATABASE_URL}
+    data_connectors:
+      default_runtime_data_connector_name:
+        class_name: RuntimeDataConnector
+        batch_identifiers:
+          - checkpoint_name
+stores:
+  expectations_store:
+    class_name: ExpectationsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: expectations/
+  validations_store:
+    class_name: ValidationsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: uncommitted/validations/
+expectations_store_name: expectations_store
+validations_store_name: validations_store
+data_docs_sites: {}
+anonymous_usage_statistics:
+  enabled: false

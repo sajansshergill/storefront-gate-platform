@@ -1,0 +1,9 @@
+node_modules/
+__pycache__/
+.pytest_cache/
+.venv/
+reports/
+playwright-report/
+test-results/
+.env
+great_expectations/uncommitted/

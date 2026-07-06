@@ -1,0 +1,44 @@
+{
+  "expectation_suite_name": "storefront_order_integrity",
+  "meta": {
+    "notes": "SQL-backed order integrity suite. CI execution lives in tests/data_quality/run_checkpoint.py; this suite records the GE business contract."
+  },
+  "expectations": [
+    {
+      "expectation_type": "expect_query_result_to_be_empty",
+      "kwargs": {
+        "query": "sql/validations/price_consistency.sql"
+      },
+      "meta": {
+        "description": "Order line totals reconcile to unit price times quantity."
+      }
+    },
+    {
+      "expectation_type": "expect_query_result_to_be_empty",
+      "kwargs": {
+        "query": "sql/validations/catalog_referential_integrity.sql"
+      },
+      "meta": {
+        "description": "Every order line references an active product variant."
+      }
+    },
+    {
+      "expectation_type": "expect_query_result_to_be_empty",
+      "kwargs": {
+        "query": "sql/validations/order_totals_reconcile.sql"
+      },
+      "meta": {
+        "description": "Order totals reconcile from subtotal, tax, shipping, and discounts."
+      }
+    },
+    {
+      "expectation_type": "expect_query_result_to_be_empty",
+      "kwargs": {
+        "query": "sql/validations/order_state_machine.sql"
+      },
+      "meta": {
+        "description": "Captured orders have an authorized or captured payment record."
+      }
+    }
+  ]
+}
